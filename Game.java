@@ -14,11 +14,15 @@
  * @author  Michael Kölling and David J. Barnes
  * @version 2016.02.29
  */
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Game 
 {
     private Parser parser;
     private Room currentRoom;
+    private ArrayList<Room> rooms;
+    
         
     /**
      * Create the game and initialise its internal map.
@@ -27,6 +31,7 @@ public class Game
     {
         createRooms();
         parser = new Parser();
+        play();
     }
 
     /**
@@ -34,15 +39,23 @@ public class Game
      */
     private void createRooms()
     {
-        Room outside, theater, pub, lab, office;
+        Room outside, theater, pub, lab, office, transporter;
       
+        rooms = new ArrayList<>();
+        
         // create the rooms
         outside = new Room("outside the main entrance of the university");
+        rooms.add(outside);
         theater = new Room("in a lecture theater");
+        rooms.add(theater);
         pub = new Room("in the campus pub");
+        rooms.add(pub);
         lab = new Room("in a computing lab");
+        rooms.add(lab);
         office = new Room("in the computing admin office");
-        
+        rooms.add(office);
+        transporter = new Room("in the transporter room");
+
         // initialise room exits
         outside.setExit("east", theater);
         outside.setExit("south", lab);
@@ -54,8 +67,11 @@ public class Game
 
         lab.setExit("north", outside);
         lab.setExit("east", office);
+        lab.setExit("west", transporter);
 
         office.setExit("west", lab);
+        
+        transporter.setExit("west", transporter);
 
         currentRoom = outside;  // start game outside
     }
@@ -154,9 +170,14 @@ public class Game
 
         // Try to leave current room.
         Room nextRoom = currentRoom.getExit(direction);
-
+        
         if (nextRoom == null) {
             System.out.println("There is no door!");
+        }
+        else if (currentRoom.getShortDescription() == "in the transporter room") {
+            Random rnd = new Random();
+            currentRoom = rooms.get((rnd.nextInt(rooms.size())));
+            System.out.println(currentRoom.getLongDescription());
         }
         else {
             currentRoom = nextRoom;
