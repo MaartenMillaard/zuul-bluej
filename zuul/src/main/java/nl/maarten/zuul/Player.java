@@ -6,7 +6,16 @@ public class Player {
 
 	private String name;
 	private ArrayList<Item> items;
+	private Room currentRoom;
 	
+	public void setCurrentRoom(Room currentRoom) {
+		this.currentRoom = currentRoom;
+	}
+
+	public Room getCurrentRoom() {
+		return currentRoom;
+	}
+
 	public Player(String name) {
 		this.name = name;
 		items = new ArrayList<>();

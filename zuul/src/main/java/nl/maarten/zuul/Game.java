@@ -26,12 +26,16 @@ public class Game
     private Room currentRoom;
     private ArrayList<Room> rooms;
     private ArrayList<Item> items;
-    private Player player;
+    private static Player player;
         
     /**
      * Create the game and initialise its internal map.
      */
     public static void main(String[] args) {
+    	System.out.print("Hello, what's your name? ");
+    	Scanner scanner = new Scanner(System.in);
+    	player = new Player(scanner.nextLine());
+    	
         new Game().play();
     }
 
@@ -104,6 +108,7 @@ public class Game
         transporter.setExit("anywhere", transporter);
 
         currentRoom = outside;  // start game outside
+        player.setCurrentRoom(currentRoom);
     }
 
     /**
@@ -111,10 +116,6 @@ public class Game
      */
     public void play() 
     {      
-    	System.out.print("Hello, what's your name? ");
-    	Scanner scanner = new Scanner(System.in);
-    	player = new Player(scanner.nextLine());
-
     	printWelcome();
 
         // Enter the main command loop.  Here we repeatedly read commands and
@@ -218,6 +219,7 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
+            player.setCurrentRoom(currentRoom);
             System.out.println(currentRoom.getLongDescription());
             System.out.println(player.getItemsString());
         }
